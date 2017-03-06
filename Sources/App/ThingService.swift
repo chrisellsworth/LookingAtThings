@@ -25,7 +25,11 @@ class ThingService {
     }
 
     func fetch(url: URL) throws -> [Thing] {
+#if os(Linux)
+        let document = try XMLDocument(contentsOf: url, options: [])
+#else
         let document = try XMLDocument(contentsOf: url, options: 0)
+#endif
         return try parse(document: document)
     }
 
@@ -40,7 +44,12 @@ class ThingService {
     }
 
     func extract(string: String) throws -> Thing? {
-        let regex = try NSRegularExpression(pattern: "^<img src=\"(.*)\"/><br/><br/><p>(.*)</p>$", options: [])
+        let pattern = "^<img src=\"(.*)\"/><br/><br/><p>(.*)</p>$"
+#if os(Linux)
+        let regex = try RegularExpression(pattern: pattern, options: [])
+#else
+        let regex = try NSRegularExpression(pattern: pattern, options: [])
+#endif
         var url: String?
         var caption: String?
         regex.enumerateMatches(in: string,
@@ -50,8 +59,13 @@ class ThingService {
                                 guard let result = result, result.numberOfRanges == 3 else {
                                     return
                                 }
+#if os(Linux)
+                                url = NSString(string: string).substring(with: result.range(at: 1))
+                                caption = NSString(string: string).substring(with: result.range(at: 2))
+#else
                                 url = (string as NSString).substring(with: result.rangeAt(1))
                                 caption = (string as NSString).substring(with: result.rangeAt(2))
+#endif
         })
 
         if let url = url, let caption = caption {
