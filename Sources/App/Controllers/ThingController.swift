@@ -17,17 +17,20 @@ class ThingController {
             throw Abort.custom(status: .preconditionFailed, message: "Missing text")
         }
 
-        guard let result = try service.get(text).first else {
-            throw Abort.notFound
-        }
-
-        let response: [String: Any] = [
-            "response_type": "in_channel",
-            "attachments": [[
-                "text": result.caption,
-                "image_url": result.url
-            ]]
+        var response: [String: Any] = [
+            "response_type": "ephemeral",
+            "text": "There is no \(text) to look at."
         ]
+
+        if let result = try service.get(text).first {
+            response = [
+                "response_type": "in_channel",
+                "attachments": [[
+                    "text": result.caption,
+                    "image_url": result.url
+                ]]
+            ]
+        }
 
         let data = try JSONSerialization.data(withJSONObject: response, options: [])
         let bytes = String(data: data, encoding: .utf8)?.toBytes()
