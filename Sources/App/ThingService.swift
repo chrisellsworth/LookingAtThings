@@ -1,14 +1,29 @@
 import Foundation
+import Vapor
 
 class ThingService {
+    let drop: Droplet
+
+    init(drop: Droplet) {
+        self.drop = drop
+    }
+
     enum ThingServiceError: Error {
         case invalidURL(String)
         case invalidQuery(String)
+        case invalidComponents([String])
     }
 
+    let baseURL = "http://kimjongillookingatthings.tumblr.com"
+
     func get(_ thing: String) throws -> [Thing] {
-        let url = try self.url(thing: thing)
-        return try fetch(url: url)
+        if thing == "anything" {
+            let url = try self.randomURL()
+            return try fetch(url: url)
+        } else {
+            let url = try self.url(thing: thing)
+            return try fetch(url: url)
+        }
     }
 
     func url(thing: String) throws -> URL {
@@ -16,11 +31,34 @@ class ThingService {
             throw ThingServiceError.invalidQuery(thing)
         }
 
-        let string = "http://kimjongillookingatthings.tumblr.com/search/\(encoded)/rss"
+        let string = "\(baseURL)/search/\(encoded)/rss"
         if let url = URL(string: string) {
             return url
         } else {
             throw ThingServiceError.invalidURL(string)
+        }
+    }
+
+    func randomURL() throws -> URL {
+        let string = "\(baseURL)/random"
+        if let url = URL(string: string) {
+            return try rss(url: url)
+        } else {
+            throw ThingServiceError.invalidURL(string)
+        }
+    }
+
+    func rss(url: URL) throws -> URL {
+        let resolved = try NetworkService(drop: drop).resolve(url: url)
+        return try stripAnchor(url: resolved).appendingPathComponent("rss")
+    }
+
+    func stripAnchor(url: URL) throws -> URL {
+        let components = url.absoluteString.components(separatedBy: "#")
+        if let first = components.first, let base = URL(string: first) {
+            return base
+        } else {
+            throw ThingServiceError.invalidComponents(components)
         }
     }
 

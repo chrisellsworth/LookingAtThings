@@ -3,7 +3,14 @@ import Vapor
 import Foundation
 
 class ThingController {
-    let service = ThingService()
+
+    let drop: Droplet
+    let service: ThingService
+
+    init(drop: Droplet) {
+        self.drop = drop
+        self.service = ThingService(drop: drop)
+    }
 
     func get(request: Request, thing: String) throws -> ResponseRepresentable {
         let results = try service.get(thing)

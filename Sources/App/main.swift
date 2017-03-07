@@ -8,7 +8,7 @@ drop.get { req in
     ])
 }
 
-let thingController = ThingController()
+let thingController = ThingController(drop: drop)
 drop.get("things", String.self, handler: thingController.get)
 drop.get("slack", handler: thingController.slack)
 

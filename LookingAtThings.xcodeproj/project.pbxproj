@@ -10,6 +10,7 @@
 		837013DF1E6CFCBC0060DFD0 /* ThingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837013DE1E6CFCBC0060DFD0 /* ThingController.swift */; };
 		837013E41E6CFE190060DFD0 /* ThingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837013E31E6CFE190060DFD0 /* ThingService.swift */; };
 		837013E81E6CFE490060DFD0 /* Thing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837013E71E6CFE490060DFD0 /* Thing.swift */; };
+		83BE56EC1E6E95A80064307B /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BE56EB1E6E95A80064307B /* NetworkService.swift */; };
 		OBJ_1429 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Array.swift */; };
 		OBJ_1430 /* Bool+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* Bool+String.swift */; };
 		OBJ_1431 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* Box.swift */; };
@@ -4959,6 +4960,7 @@
 		837013DE1E6CFCBC0060DFD0 /* ThingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThingController.swift; sourceTree = "<group>"; };
 		837013E31E6CFE190060DFD0 /* ThingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThingService.swift; sourceTree = "<group>"; };
 		837013E71E6CFE490060DFD0 /* Thing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Thing.swift; sourceTree = "<group>"; };
+		83BE56EB1E6E95A80064307B /* NetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		OBJ_10 /* Bool+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+String.swift"; sourceTree = "<group>"; };
 		OBJ_100 /* bio_lib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bio_lib.c; sourceTree = "<group>"; };
 		OBJ_1001 /* FrameDeserializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDeserializer.swift; sourceTree = "<group>"; };
@@ -6989,6 +6991,7 @@
 		837013E21E6CFE0D0060DFD0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				83BE56EB1E6E95A80064307B /* NetworkService.swift */,
 				837013E31E6CFE190060DFD0 /* ThingService.swift */,
 			);
 			name = Services;
@@ -8634,7 +8637,7 @@
 			path = "Packages/CLibreSSL-1.0.0/Sources/CLibreSSL";
 			sourceTree = SOURCE_ROOT;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -8646,7 +8649,6 @@
 				OBJ_1381 /* Resources */,
 				OBJ_1382 /* Products */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_657 /* include */ = {
@@ -10710,7 +10712,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_1382 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -12196,6 +12198,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				83BE56EC1E6E95A80064307B /* NetworkService.swift in Sources */,
 				837013E41E6CFE190060DFD0 /* ThingService.swift in Sources */,
 				OBJ_3679 /* main.swift in Sources */,
 				837013DF1E6CFCBC0060DFD0 /* ThingController.swift in Sources */,
