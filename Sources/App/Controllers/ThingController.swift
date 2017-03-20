@@ -32,6 +32,7 @@ class ThingController {
         if let result = try service.get(text).first {
             response = [
                 "response_type": "in_channel",
+                "username": result.looker.description,
                 "attachments": [[
                     "text": result.caption,
                     "image_url": result.url

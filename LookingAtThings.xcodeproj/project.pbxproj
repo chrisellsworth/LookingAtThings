@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8324E1621E7F66D400838D09 /* Looker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8324E1601E7F648D00838D09 /* Looker.swift */; };
 		837013DF1E6CFCBC0060DFD0 /* ThingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837013DE1E6CFCBC0060DFD0 /* ThingController.swift */; };
 		837013E41E6CFE190060DFD0 /* ThingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837013E31E6CFE190060DFD0 /* ThingService.swift */; };
 		837013E81E6CFE490060DFD0 /* Thing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837013E71E6CFE490060DFD0 /* Thing.swift */; };
@@ -4957,6 +4958,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8324E1601E7F648D00838D09 /* Looker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Looker.swift; sourceTree = "<group>"; };
 		837013DE1E6CFCBC0060DFD0 /* ThingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThingController.swift; sourceTree = "<group>"; };
 		837013E31E6CFE190060DFD0 /* ThingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThingService.swift; sourceTree = "<group>"; };
 		837013E71E6CFE490060DFD0 /* Thing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Thing.swift; sourceTree = "<group>"; };
@@ -7929,6 +7931,7 @@
 		OBJ_1375 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				8324E1601E7F648D00838D09 /* Looker.swift */,
 				837013E71E6CFE490060DFD0 /* Thing.swift */,
 			);
 			path = Models;
@@ -12199,6 +12202,7 @@
 			buildActionMask = 0;
 			files = (
 				83BE56EC1E6E95A80064307B /* NetworkService.swift in Sources */,
+				8324E1621E7F66D400838D09 /* Looker.swift in Sources */,
 				837013E41E6CFE190060DFD0 /* ThingService.swift in Sources */,
 				OBJ_3679 /* main.swift in Sources */,
 				837013DF1E6CFCBC0060DFD0 /* ThingController.swift in Sources */,

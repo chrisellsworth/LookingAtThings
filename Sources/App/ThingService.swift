@@ -14,23 +14,40 @@ class ThingService {
         case invalidComponents([String])
     }
 
-    let baseURL = "http://kimjongillookingatthings.tumblr.com"
-
-    func get(_ thing: String) throws -> [Thing] {
-        if thing == "anything" {
-            let url = try self.randomURL()
-            return try fetch(url: url)
-        } else {
-            let url = try self.url(thing: thing)
-            return try fetch(url: url)
+    func baseURL(looker: Looker) -> String {
+        switch looker {
+        case .il:
+            return "http://kimjongillookingatthings.tumblr.com"
+        case .un:
+            return "http://kimjongunlookingatthings.tumblr.com"
         }
     }
 
-    func url(thing: String) throws -> URL {
+    func get(_ thing: String) throws -> [Thing] {
+        let results = try get(thing, looker: .il)
+        if results.isEmpty {
+            return try get(thing, looker: .un)
+        } else {
+            return results
+        }
+    }
+
+    func get(_ thing: String, looker: Looker) throws -> [Thing] {
+        let url: URL
+        if thing == "anything" {
+            url = try self.randomURL(looker: looker)
+        } else {
+            url = try self.url(thing: thing, looker: looker)
+        }
+        return try fetch(url: url, looker: looker)
+    }
+
+    func url(thing: String, looker: Looker) throws -> URL {
         guard let encoded = thing.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
             throw ThingServiceError.invalidQuery(thing)
         }
 
+        let baseURL = self.baseURL(looker: looker)
         let string = "\(baseURL)/search/\(encoded)/rss"
         if let url = URL(string: string) {
             return url
@@ -39,7 +56,8 @@ class ThingService {
         }
     }
 
-    func randomURL() throws -> URL {
+    func randomURL(looker: Looker) throws -> URL {
+        let baseURL = self.baseURL(looker: looker)
         let string = "\(baseURL)/random"
         if let url = URL(string: string) {
             return try rss(url: url)
@@ -62,26 +80,26 @@ class ThingService {
         }
     }
 
-    func fetch(url: URL) throws -> [Thing] {
+    func fetch(url: URL, looker: Looker) throws -> [Thing] {
 #if os(Linux)
         let document = try XMLDocument(contentsOf: url, options: [])
 #else
         let document = try XMLDocument(contentsOf: url, options: 0)
 #endif
-        return try parse(document: document)
+        return try parse(document: document, looker: looker)
     }
 
-    func parse(document: XMLDocument) throws -> [Thing] {
+    func parse(document: XMLDocument, looker: Looker) throws -> [Thing] {
         let nodes = try document.nodes(forXPath: "//channel/item/description")
         let values = try nodes
             .map { $0.objectValue as? String }
             .flatMap { $0 }
-            .map(extract)
+            .map { try extract(node: $0, looker: looker) }
             .flatMap { $0 }
         return values
     }
 
-    func extract(string: String) throws -> Thing? {
+    func extract(string: String, looker: Looker) throws -> Thing? {
         let pattern = "^<img src=\"(.*)\"/><br/><br/><p>(.*)</p>$"
 #if os(Linux)
         let regex = try RegularExpression(pattern: pattern, options: [])
@@ -107,7 +125,7 @@ class ThingService {
         })
 
         if let url = url, let caption = caption {
-            return Thing(url: url, caption: caption)
+            return Thing(url: url, caption: caption, looker: looker)
         } else {
             return nil
         }
