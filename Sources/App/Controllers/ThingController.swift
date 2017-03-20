@@ -34,8 +34,10 @@ class ThingController {
                 "response_type": "in_channel",
                 "username": result.looker.description,
                 "attachments": [[
-                    "text": result.caption,
-                    "image_url": result.url
+                    "fallback": result.caption,
+                    "title": result.caption,
+                    "title_link": result.link,
+                    "image_url": result.imageUrl
                 ]]
             ]
         }

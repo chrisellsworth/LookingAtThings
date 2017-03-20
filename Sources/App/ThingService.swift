@@ -90,44 +90,63 @@ class ThingService {
     }
 
     func parse(document: XMLDocument, looker: Looker) throws -> [Thing] {
-        let nodes = try document.nodes(forXPath: "//channel/item/description")
+        let nodes = try document.nodes(forXPath: "//channel/item")
         let values = try nodes
-            .map { $0.objectValue as? String }
-            .flatMap { $0 }
-            .map { try extract(node: $0, looker: looker) }
+            .map { try parse(node: $0, looker: looker) }
             .flatMap { $0 }
         return values
     }
 
-    func extract(string: String, looker: Looker) throws -> Thing? {
+    func parse(node: XMLNode, looker: Looker) throws -> Thing? {
+        guard let description = try extract(path: "description", from: node) as? String else {
+            return nil
+        }
+
+        guard let link = try extract(path: "link", from: node) as? String else {
+            return nil
+        }
+
+        let (imageUrl, caption) = try parseDescription(description: description)
+
+        if let imageUrl = imageUrl, let caption = caption {
+            return Thing(caption: caption,
+                         imageUrl: imageUrl,
+                         link: link,
+                         looker: looker)
+        } else {
+            return nil
+        }
+    }
+
+    func parseDescription(description: String) throws -> (url: String?, caption: String?) {
         let pattern = "^<img src=\"(.*)\"/><br/><br/><p>(.*)</p>$"
 #if os(Linux)
         let regex = try RegularExpression(pattern: pattern, options: [])
 #else
         let regex = try NSRegularExpression(pattern: pattern, options: [])
 #endif
-        var url: String?
+        var imageUrl: String?
         var caption: String?
-        regex.enumerateMatches(in: string,
+        regex.enumerateMatches(in: description,
                                options: [],
-                               range: NSRange(location: 0, length: string.characters.count),
+                               range: NSRange(location: 0, length: description.characters.count),
                                using: { (result, _, _) in
                                 guard let result = result, result.numberOfRanges == 3 else {
                                     return
                                 }
 #if os(Linux)
-                                url = NSString(string: string).substring(with: result.range(at: 1))
-                                caption = NSString(string: string).substring(with: result.range(at: 2))
+                                imageUrl = NSString(string: description).substring(with: result.range(at: 1))
+                                caption = NSString(string: description).substring(with: result.range(at: 2))
 #else
-                                url = (string as NSString).substring(with: result.rangeAt(1))
-                                caption = (string as NSString).substring(with: result.rangeAt(2))
+                                imageUrl = (description as NSString).substring(with: result.rangeAt(1))
+                                caption = (description as NSString).substring(with: result.rangeAt(2))
 #endif
         })
 
-        if let url = url, let caption = caption {
-            return Thing(url: url, caption: caption, looker: looker)
-        } else {
-            return nil
-        }
+        return (url: imageUrl, caption: caption)
+    }
+
+    func extract(path: String, from node: XMLNode) throws -> Any? {
+        return try node.nodes(forXPath: path).first?.objectValue
     }
 }
